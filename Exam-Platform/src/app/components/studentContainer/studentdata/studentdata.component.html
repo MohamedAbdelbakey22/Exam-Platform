@@ -1,0 +1,35 @@
+<div *ngIf="isAdmin == 'student' ; else alert" class="w-1/2 mx-auto shadow-lg my-6 p-8 space-y-6">
+    <div class="grid grid-cols-12">
+        <div class="col-span-4 bg-teal-600 text-center text-white">
+            <span class="p-2 block">Name</span>
+        </div>
+        <div class="col-span-8 bg-white ps-4 py-2">{{studentName}}</div>
+    </div>
+    <div class="grid grid-cols-12">
+        <div class="col-span-4 bg-teal-600 text-center text-white">
+            <span class="p-2 block">Code</span>
+        </div>
+        <div class="col-span-8 bg-white ps-4 py-2">{{studentCode}}</div>
+    </div>
+    <div class="grid grid-cols-12">
+        <div class="col-span-4 bg-teal-600 text-center text-white">
+            <span class="p-2 block">National ID</span>
+        </div>
+        <div class="col-span-8 bg-white ps-4 py-2">{{studentNationalID}}</div>
+    </div>
+    <div class="grid grid-cols-12">
+        <div class="col-span-4 bg-teal-600 text-center text-white">
+            <span class="p-2 block">Level</span>
+        </div>
+        <div class="col-span-8 bg-white ps-4 py-2">{{studentLevel}}</div>
+    </div>
+</div>
+
+<ng-template #alert>
+    <div class="flex gap-2 items-center bg-white rounded w-1/2 mx-auto p-4 shadow-xl mt-6">
+        <div class="size-6 flex items-center justify-center rounded-full bg-amber-400 text-white">
+            <i class="bi bi-exclamation-lg text-xl"></i>
+        </div>
+        <span class=" font-semibold">Welcome in Student Page Dr_{{studentName}}</span>
+    </div>
+</ng-template>

@@ -1,0 +1,142 @@
+<div class="container">
+
+    <div class="flex items-center flex-wrap lg:justify-around justify-between gap-4">
+        <div>
+            <button (click)="hideStudent()" id="addStudent"
+                class="px-6 py-1 text-sm text-white rounded-md bg-sky-700 lg:text-base focus:outline-none">Add
+                Student</button>
+        </div>
+
+        <div>
+            <button (click)="showStudent()" id="manageStudent"
+                class="px-6 py-1 text-sm text-white rounded-md bg-sky-700 lg:text-base focus:outline-none">Manage
+                Students</button>
+        </div>
+
+        <input type="search" id="search" [(ngModel)]="searchByNID"
+            class="lg:w-1/2 w-full px-4 py-1 text-sm border border-sky-700 rounded-md focus:border-2 focus:outline-none lg:text-base"
+            placeholder="Search with NID or Name">
+    </div>
+
+    <div class="mt-6">
+
+        <!--==== Manage Students ====-->
+        <div id="displayStudent" class="lg:container my-8">
+            <h2 class="text-2xl font-bold text-center">Manage Students</h2>
+
+            <table class="w-full mt-4">
+                <thead class="border-b-2 border-gray-100">
+                    <tr class="*:tableHead">
+                        <th>SN</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>NID</th>
+                        <!-- <th>Update</th> -->
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y-2 divide-gray-100 even:bg-slate-200"
+                    *ngFor="let student of studentsData | search:searchByNID; let index = index">
+                    <tr class="*:tableBody">
+                        <td>{{index + 1}}</td>
+                        <td>{{student.name}}</td>
+                        <td>{{student.gmail}}</td>
+                        <td>{{student.nationalPerson}}</td>
+                        <!-- <td><span (click)="updateStudentData(student._id,registerForm.value)" id="updateBtn"
+                                class="p-2 border rounded-md cursor-pointer border-amber-400 hover:text-white hover:bg-amber-400">Update
+                            </span>
+                        </td> -->
+                        <td><span (click)="removeStudent(student._id)"
+                                class="p-2 border rounded-md cursor-pointer border-rose-500 hover:text-white hover:bg-rose-500">Delate</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--==== Add Students ====-->
+        <div id="manageStudents" class="container hidden my-8">
+
+            <h2 class="mb-8 text-2xl font-bold text-center">Add Students</h2>
+
+            <p *ngIf="errorMsg" class="alert lg:w-3/4 w-full mx-auto">{{errorMsg}}</p>
+
+            <!--==== Student Form ====-->
+
+            <form [formGroup]="registerForm" (ngSubmit)="handleRegisterForm(registerForm)"
+                class="lg:w-3/4 w-full mx-auto space-y-4 ">
+
+                <!--==== Name Validation ====-->
+                <div>
+                    <input formControlName="name" type="text" class="docstu-input" placeholder="Student name">
+                    <div class="alert"
+                        *ngIf="registerForm.get('name')?.errors && (registerForm.get('name')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('name')?.getError('required')">Name is required
+                        </p>
+                    </div>
+                </div>
+
+                <!--==== National ID Validation ====-->
+                <div>
+                    <input formControlName="nationalPerson" type="text" class="docstu-input" placeholder="NID">
+                    <div class="alert"
+                        *ngIf="registerForm.get('nationalPerson')?.errors && (registerForm.get('nationalPerson')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('nationalPerson')?.getError('required')">National Number is required
+                        </p>
+                        <p *ngIf="registerForm.get('nationalPerson')?.getError('pattern')">National Number must not be
+                            least about 14 characters
+                        </p>
+                    </div>
+                </div>
+
+                <!--==== Email Validation ====-->
+                <div>
+                    <input formControlName="gmail" type="email" class="docstu-input" placeholder="Email">
+                    <div class="alert"
+                        *ngIf="registerForm.get('gmail')?.errors && (registerForm.get('gmail')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('gmail')?.getError('required')">Email is required
+                        </p>
+                        <p *ngIf="registerForm.get('gmail')?.getError('email')">Email is not valid
+                        </p>
+                    </div>
+                </div>
+
+                <!--==== Level Validation ====-->
+                <div>
+                    <input formControlName="level" type="number" class="docstu-input" placeholder="level">
+                    <div class="alert"
+                        *ngIf="registerForm.get('level')?.errors && (registerForm.get('level')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('level')?.getError('required')">Level is required
+                        </p>
+                    </div>
+                </div>
+
+                <!--==== Password Validation==== -->
+                <div>
+                    <input formControlName="password" type="password" class="docstu-input" placeholder="password">
+                    <div class="alert"
+                        *ngIf="registerForm.get('password')?.errors && (registerForm.get('password')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('password')?.getError('required')">Password is required
+                        </p>
+                    </div>
+                </div>
+
+                <!--==== Code Validation ====-->
+                <div>
+                    <input formControlName="code" type="number" class="docstu-input" placeholder="Code">
+                    <div class="alert"
+                        *ngIf="registerForm.get('code')?.errors && (registerForm.get('code')?.touched || inValidForm)">
+                        <p *ngIf="registerForm.get('code')?.getError('required')">Code is required
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-2 text-white rounded-md focus:outline-none bg-sky-700">
+                    <i *ngIf="isLoading" class="fas fa-spin fa-spinner"></i>
+                    <span *ngIf="!isLoading">Add Student</span>
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>

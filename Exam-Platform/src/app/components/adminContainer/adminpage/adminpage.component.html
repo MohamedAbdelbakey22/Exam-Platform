@@ -1,0 +1,29 @@
+<div class="bg-slate-200 h-screen flex items-center px-10 relative">
+    <!-- <h2 class="text-xl container font-bold fixed right-10 top-6 text-center">Admin Dashboard</h2> -->
+    <div class="w-2/12 rounded-3xl bg-sky-700 h-[95%]"></div>
+    <div class="absolute h-[85%] w-[90%] ms-10 mx-auto bg-white rounded-3xl overflow-hidden shadow-lg">
+        <div class="grid grid-cols-12">
+
+            <div class="col-span-2 h-[91vh] bg-gray-200  flex flex-col items-center justify-around relative">
+                <h2 class="md:text-xl absolute top-5 md:font-bold">Admin Dashboard</h2>
+
+                <ul class="divide-y divide-sky-700 *:py-4 text-center">
+                    <li><a routerLink="managestudents" routerLinkActive="font-bold text-sky-700">Manage Students</a>
+                    </li>
+                    <li><a routerLink="managedoctors" routerLinkActive="font-bold text-sky-700">Manage Doctors</a>
+                    </li>
+                    <li><a routerLink="courses" routerLinkActive="font-bold text-sky-700">Courses</a>
+                    </li>
+                </ul>
+                <span (click)="logout()" class="cursor-pointer gap-2 items-center flex ">
+                    <i class="bi bi-box-arrow-right text-xl text-sky-700"></i> Logout</span>
+
+            </div>
+
+            <div class="col-span-10 overflow-y-auto h-[91vh] pt-4 pb-5">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+
+</div>

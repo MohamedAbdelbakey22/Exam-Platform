@@ -1,0 +1,79 @@
+<div class="mt-10 lg:w-3/4 w-full mx-auto">
+
+    <h2 class="py-4 font-bold text-xl tracking-widest">Register Now!</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="handleRegisterForm(registerForm)" class="mx-auto space-y-4 ">
+
+        <!--==== Name Validation ====-->
+        <div>
+            <input formControlName="name" type="text" class="dsMainInput" placeholder="Student name">
+            <div class="alert"
+                *ngIf="registerForm.get('name')?.errors && (registerForm.get('name')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('name')?.getError('required')">Name is required
+                </p>
+            </div>
+        </div>
+
+        <!--==== National ID Validation ====-->
+        <div>
+            <input formControlName="nationalPerson" type="text" class="dsMainInput" placeholder="NID">
+            <div class="alert"
+                *ngIf="registerForm.get('nationalPerson')?.errors && (registerForm.get('nationalPerson')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('nationalPerson')?.getError('required')">National Number is required
+                </p>
+                <p *ngIf="registerForm.get('nationalPerson')?.getError('pattern')">National Number must not be
+                    least about 14 characters
+                </p>
+            </div>
+        </div>
+
+        <!--==== Email Validation ====-->
+        <div>
+            <input formControlName="gmail" type="email" class="dsMainInput" placeholder="Email">
+            <div class="alert"
+                *ngIf="registerForm.get('gmail')?.errors && (registerForm.get('gmail')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('gmail')?.getError('required')">Email is required
+                </p>
+                <p *ngIf="registerForm.get('gmail')?.getError('email')">Email is not valid
+                </p>
+            </div>
+        </div>
+
+        <!--==== Level Validation ====-->
+        <div>
+            <input formControlName="level" type="number" class="dsMainInput" placeholder="level">
+            <div class="alert"
+                *ngIf="registerForm.get('level')?.errors && (registerForm.get('level')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('level')?.getError('required')">Level is required
+                </p>
+            </div>
+        </div>
+
+        <!--==== Password Validation==== -->
+        <div>
+            <input formControlName="password" type="password" class="dsMainInput" placeholder="password">
+            <div class="alert"
+                *ngIf="registerForm.get('password')?.errors && (registerForm.get('password')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('password')?.getError('required')">Password is required
+                </p>
+            </div>
+        </div>
+
+        <!--==== Code Validation ====-->
+        <div>
+            <input formControlName="code" type="number" class="dsMainInput" placeholder="Code">
+            <div class="alert"
+                *ngIf="registerForm.get('code')?.errors && (registerForm.get('code')?.touched || inValidForm)">
+                <p *ngIf="registerForm.get('code')?.getError('required')">Code is required
+                </p>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full py-2 text-white rounded-md focus:outline-none bg-teal-600">
+            <i *ngIf="isLoading" class="fas fa-spin fa-spinner"></i>
+            <span *ngIf="!isLoading">Add Student</span>
+        </button>
+
+        <p>You have an account ? <a class="font-semibold text-md" routerLink="/studentlogin">Login</a></p>
+
+    </form>
+</div>

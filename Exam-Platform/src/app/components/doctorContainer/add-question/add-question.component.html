@@ -1,0 +1,81 @@
+<div class="py-4 container flex flex-col space-y-4 flex-wrap">
+    <div class="flex justify-between items-center">
+
+        <div *ngIf="" class="*:cursor-pointer bg-white p-4 rounded shadow-xl *:text-nowrap">
+            <label for="examTime" class="font-semibold text-lg">Time : </label>
+            <input [(ngModel)]="timerValue" type="number" id="examTime"
+                class="w-20 rounded border border-teal-600 focus:outline-none cursor-pointer px-2">
+        </div>
+
+        <div *ngIf="courseActive" class="*:cursor-pointer bg-white p-4 rounded shadow-xl *:text-nowrap">
+            <h2 class="font-semibold text-lg">Course : {{courseActive.name}}</h2>
+        </div>
+    </div>
+
+    <div class="cursor-pointer bg-white p-4 rounded shadow-xl *:text-nowrap">
+        <label for="examDateTime" class="font-semibold text-lg">Exam Start Date and Time: </label>
+        <input [(ngModel)]="examDateTime" (change)="onDateChange()" type="datetime-local" id="examDateTime"
+            class="rounded border border-teal-600 focus:outline-none cursor-pointer px-2">
+    </div>
+
+    <!--==== Camera Mode ====-->
+    <!-- <div class="*:cursor-pointer bg-white p-4 rounded shadow-xl">
+        <input type="checkbox" id="cameraMode" class="focus:outline-none">
+        <label for="cameraMode" class="px-2 font-semibold text-lg">Camera Mode</label>
+    </div> -->
+
+</div>
+
+<!-- ==== Exam ==== -->
+<div class="container my-4">
+    <h2 class="font-bold text-xl tracking-widest">Add Questions</h2>
+
+    <div [ngClass]="{'border-hidden':isLast}" class="border-b border-teal-600 pb-4"
+        *ngFor="let question of questions; let i = index ; let isLast = last">
+
+        <h3 class="font-semibold text-lg py-4 underline decoration-2 underline-offset-8 ">Question {{ i + 1 }}</h3>
+
+        <div>
+            <textarea [(ngModel)]="question.question"
+                class="resize-none border px-4 rounded focus:outline-none w-full border-teal-600" rows="5"></textarea>
+        </div>
+
+        <button (click)="addOption(question)"
+            class="border border-teal-600 py-1 px-2 rounded my-2 hover:bg-teal-600 hover:text-white focus:outline-none">Add
+            Option</button>
+
+        <div *ngFor="let option of question.options; let j = index">
+            <div class="space-x-4">
+
+                <label class="font-semibold text-lg py-2">Option {{ j + 1 }} :</label>
+
+                <input type="text" class="border border-teal-600 py-1 px-2 rounded focus:outline-none lg:w-2/3"
+                    [ngModelOptions]="{ updateOn: 'blur' }" [(ngModel)]="question.options[j]">
+
+                <button (click)="removeOption(question, j)"
+                    class="border border-teal-600 py-1 px-2 rounded my-4 hover:bg-teal-600 hover:text-white">Remove</button>
+
+            </div>
+        </div>
+
+        <div>
+            <label class="font-semibold text-lg py-2">Correct Option :</label>
+            <select [(ngModel)]="question.correctAnswer" class="focus:outline-none p-2 bg-transparent">
+                <option selected hidden>Select</option>
+                <option class="p-2" *ngFor="let option of question.options">{{ option }}</option>
+            </select>
+        </div>
+
+        <button (click)="removeQuestion(i)"
+            class="border border-teal-600 py-1 px-2 rounded my-2 hover:bg-teal-600 hover:text-white focus:outline-none">Remove
+            Question</button>
+    </div>
+
+    <button
+        class="border border-teal-600 py-1 px-2 rounded my-4 bg-white hover:bg-teal-600 hover:text-white focus:outline-none"
+        (click)="addQuestion()">Add Question</button>
+
+    <button *ngIf="questions"
+        class="border border-teal-600 py-1 px-2 rounded my-4 bg-white hover:bg-teal-600 hover:text-white focus:outline-none mx-4"
+        (click)="submitQuestions() ; setTimer()">Submit</button>
+</div>

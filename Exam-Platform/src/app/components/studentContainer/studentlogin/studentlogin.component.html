@@ -1,0 +1,36 @@
+<div class="flex items-center h-screen bg-slate-200">
+    <div class="md:w-1/2 w-2/3 mx-auto">
+        <i class="block mx-auto my-10 text-center bi bi-person-workspace text-9xl"></i>
+
+        <p *ngIf="loginError" class="alert">{{loginError}}</p>
+        <form [formGroup]="signIn" (ngSubmit)="handleSignIn(signIn)" class="space-y-4">
+            <div class="relative">
+                <input formControlName="gmail" type="email" class="dsLogin" placeholder="Email Address">
+                <i class="absolute -translate-y-1/2 bi bi-person left-4 top-1/2 text-teal-600"></i>
+            </div>
+
+            <div class="relative">
+                <input formControlName="password" type="password" class="dsLogin" placeholder="Password">
+                <i class="absolute -translate-y-1/2 bi bi-key left-4 top-1/2 text-teal-600"></i>
+            </div>
+
+            <a routerLink="/dforgetpassword">
+                <span class="block my-2">Forget Password ?</span>
+            </a>
+
+            <button type="submit" class="py-3 text-white rounded-md bg-teal-600 w-full focus:outline-none">
+                <i *ngIf="isLoading" class="fas fa-spin fa-spinner"></i>
+                <span *ngIf="!isLoading">Login</span>
+            </button>
+
+            <!-- <p>You have an account ? <a class="font-semibold text-md" routerLink="/sregister">Create Account</a></p> -->
+
+            <a routerLink="/home" class="fixed top-5 left-20 flex items-center gap-2">
+                <i class="bi bi-arrow-left text-xl text-teal-600"></i>
+                <span class="text-teal-600 text-lg">Home</span>
+            </a>
+
+        </form>
+
+    </div>
+</div>

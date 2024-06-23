@@ -1,0 +1,103 @@
+<div class="container">
+    <div class="flex flex-wrap items-center lg:justify-around justify-between gap-4">
+        <div>
+            <button (click)="addCoursesBtn()"
+                class="px-6 py-1 text-sm text-white rounded-md bg-sky-700 lg:text-base">Add
+                Course</button>
+        </div>
+
+        <div>
+            <button (click)="mangeCourseBtn()"
+                class="px-6 py-1 text-sm text-white rounded-md bg-sky-700 lg:text-base">Manage Courses</button>
+        </div>
+
+        <input [(ngModel)]="searchCourse" *ngIf="manageCourses"
+            class="lg:w-1/2 w-full px-4 py-1 text-sm border border-sky-700 rounded-md focus:border-2 focus:outline-none lg:text-base"
+            placeholder="Search with NID or Code">
+    </div>
+
+    <div class="mt-6">
+
+        <!--==== Manage Students ====-->
+        <div *ngIf="manageCourses" class="lg:container my-8">
+            <h2 class="text-2xl font-bold text-center">Manage Courses</h2>
+
+            <table class="w-full mt-4">
+                <thead class="border-b-2 border-gray-100">
+                    <tr class="*:tableHead">
+                        <th>SN</th>
+                        <th>Course Name</th>
+                        <th>Code</th>
+                        <th>Department</th>
+                        <!-- <th>Update</th> -->
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y-2 divide-gray-100 even:bg-gray-200"
+                    *ngFor="let course of courses | coursesearch:searchCourse; let index = index">
+                    <tr class="*:tableBody">
+                        <td>{{index + 1}}</td>
+                        <td>{{course.name}}</td>
+                        <td>{{course.code}}</td>
+                        <td>{{course.department}}</td>
+                        <!-- <td><span
+                                class="p-2 border rounded-md cursor-pointer border-amber-400 hover:text-white hover:bg-amber-400">Update</span>
+                        </td> -->
+                        <td><span (click)="deleteCourse(course._id)"
+                                class="p-2 border rounded-md cursor-pointer border-rose-500 hover:text-white hover:bg-rose-500">Delate</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--==== Add Course  -->
+        <div *ngIf="add" class="container my-8">
+
+            <h2 class="mb-8 text-2xl font-bold text-center">Add Students</h2>
+
+            <p *ngIf="errorMsg" class="alert lg:w-3/4 w-full mx-auto">{{errorMsg}}</p>
+
+            <!-- ==== Course Form ==== -->
+
+            <form [formGroup]="courseForm" (ngSubmit)="addCourse(courseForm)"
+                class="lg:w-3/4 w-full mx-auto space-y-4 ">
+
+                <!-- ==== Name Validation ==== -->
+                <div>
+                    <input formControlName="name" type="text" class="docstu-input" placeholder="Course name">
+                    <div class="alert"
+                        *ngIf="courseForm.get('name')?.errors && (courseForm.get('name')?.touched || inValidForm)">
+                        <p *ngIf="courseForm.get('name')?.getError('required')">Name is required
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ==== Code Validation ==== -->
+                <div>
+                    <input formControlName="code" type="text" class="docstu-input" placeholder="Code">
+                    <div class="alert"
+                        *ngIf="courseForm.get('code')?.errors && (courseForm.get('code')?.touched || inValidForm)">
+                        <p *ngIf="courseForm.get('code')?.getError('required')">Code is required
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ==== Department Validation ==== -->
+                <div>
+                    <input formControlName="department" type="text" class="docstu-input" placeholder="Department">
+                    <div class="alert"
+                        *ngIf="courseForm.get('department')?.errors && (courseForm.get('department')?.touched || inValidForm)">
+                        <p *ngIf="courseForm.get('department')?.getError('required')">Department is required
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-2 text-white rounded-md focus:outline-none bg-sky-700">
+                    <i *ngIf="isLoading" class="fas fa-spin fa-spinner"></i>
+                    <span *ngIf="!isLoading">Add Course</span>
+                </button>
+
+            </form>
+        </div>
+    </div>

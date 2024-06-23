@@ -1,0 +1,42 @@
+<div class="h-screen bg-teal-900 flex items-center justify-center">
+    <div class="h-[90%] grid grid-cols-12 bg-slate-200 rounded-3xl shadow-xl w-[90%] overflow-hidden">
+        <div class="col-span-2 bg-teal-600 h-full rounded-s-3xl p-4 text-white">
+            <div class="flex flex-col gap-6 mt-4 h-full">
+                <h1 class="md:font-bold md:text-lg text-[12px]">Student Dashboard</h1>
+
+                <div class="cursor-pointer">
+                    <h4 class="flex items-center gap-4" (click)="toggle()"><span>Courses</span> <i
+                            class="bi bi-chevron-down text-sm"></i></h4>
+                    <ul *ngFor="let course of courses" [class.hidden]="!showCourses">
+                        <li class="p-1 text-nowrap text-[12px]"><a [routerLink]="['/studentpage/sexam', course._id]"
+                                routerLinkActive="bg-teal-900 p-1 rounded">{{course.name}}</a>
+                        </li>
+                        <!-- routerLinkActive="bg-teal-900 p-1 rounded" -->
+                    </ul>
+                </div>
+
+                <!-- <div>
+                    <a class="flex items-center gap-2" routerLink="dexam" routerLinkActive="bg-teal-900 p-1 rounded">
+                        <i class="bi bi-clock-history md:block hidden text-nowrap"></i>
+                        <span>Results</span>
+                    </a>
+                </div> -->
+
+                <div class="mt-auto mb-10">
+                    <span (click)="logOut()" class="cursor-pointer gap-2 items-center flex ">
+                        <i class="bi bi-box-arrow-right text-xl text-white"></i> Logout</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-10 overflow-y-auto h-[95%]">
+            <div class="bg-white flex items-center justify-between px-10 py-2 rounded-tr-3xl">
+                <h2 *ngIf="isAdmin == 'student'" class="md:font-bold md:text-lg text-[12px] tracking-widest">
+                    St_{{studentName}}</h2>
+                <h2 *ngIf="isAdmin == 'admin'" class="md:font-bold md:text-lg text-[12px] tracking-widest">
+                    Dr_{{studentName}}</h2>
+                <a class="py-1 px-2 text-white bg-teal-600 rounded" routerLink="schangepassword">Change Password</a>
+            </div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

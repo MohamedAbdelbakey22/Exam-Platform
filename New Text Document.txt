@@ -1,0 +1,197 @@
+====================================================== Student Exam ==========================================================
+
+==== Exam.ts ====
+
+import { QuestionService } from './../../../services/question.service';
+import { Component, OnInit } from '@angular/core';
+import { Question } from 'src/app/interfaces/question.js';
+
+@Component({
+  selector: 'app-dexam',
+  templateUrl: './dexam.component.html',
+  styleUrls: ['./dexam.component.css']
+})
+export class DexamComponent implements OnInit {
+
+  questions: Question[] = []; // قائمة الأسئلة
+  currentQuestionIndex = 0; // مؤشر السؤال الحالي
+  selectedOption: string = ''; // الخيار المحدد
+
+  constructor(private _QuestionService:QuestionService){}
+
+  ngOnInit() {
+    // استرجاع الأسئلة من الباك إند
+    this.getQuestions();
+  }
+
+  getQuestions() {
+    // استدعاء خدمة أو API لاسترجاع الأسئلة من الباك إند وتعيينها في قائمة الأسئلة
+    // يمكنك استخدام HttpClientModule للتواصل مع الباك إند
+    this._QuestionService.getQuestions().subscribe({
+      next:(response)=>{
+        console.log(response.results);
+        
+        this.questions = response.results
+      }
+    })
+  }
+
+  nextQuestion() {
+    if (this.currentQuestionIndex < this.questions.length - 1) {
+      this.currentQuestionIndex++;
+      this.selectedOption = '';
+    }
+  }
+
+  previousQuestion() {
+    if (this.currentQuestionIndex  > 0) {
+      this.currentQuestionIndex--;
+      this.selectedOption = '';
+    }
+  }
+
+  submitQuestions() {
+    // إرسال الأسئلة والإجابات المدخلة إلى الباك إند للمعالجة والتخزين
+  }
+
+}
+
+==== Exam.html ====
+
+<div *ngIf="questions.length > 0">
+    <h3>Question {{ currentQuestionIndex + 1 }}</h3>
+    <p>{{ questions[currentQuestionIndex].question }}</p>
+
+    <ul>
+        <li *ngFor="let option of questions[currentQuestionIndex].incorrect_answers">
+            <input type="radio" name="option" [(ngModel)]="selectedOption" [value]="option">
+            <label>{{ option }}</label>
+        </li>
+    </ul>
+
+    <button (click)="nextQuestion()">Next</button>
+
+    <button (click)="previousQuestion()">previous</button>
+
+    <button (click)="submitQuestions()">Submit</button>
+</div>
+
+==== Question Service.ts
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class QuestionService {
+
+  private apiUrl = 'http://example.com/api'; // قم بتعيين عنوان API الصحيح
+
+  constructor(private _HttpClient:HttpClient) { }
+
+  getQuestions(): Observable<any> {
+    // return this._HttpClient.get<any[]>(`${this.apiUrl}/questions`);
+    return this._HttpClient.get(`https://opentdb.com/api.php?amount=15&category=21&difficulty=easy&type=multiple`)
+  }
+
+  submitQuestions(questions: any[]): Observable<any> {
+    return this._HttpClient.post<any>(`${this.apiUrl}/submit`, questions);
+  }
+}
+
+==== question.ts ====
+
+export interface Question {
+    id: number;
+    question: string;
+    options: string[];
+    answer: string;
+}
+
+======================================================================= Student Exam.ts ============================================================
+
+import { Component } from '@angular/core';
+import { Question } from 'src/app/interfaces/question.js';
+import { QuestionListService } from 'src/app/services/question-list.service';
+
+@Component({
+  selector: 'app-sexam',
+  templateUrl: './sexam.component.html',
+  styleUrls: ['./sexam.component.css']
+})
+export class SexamComponent {
+
+  constructor(private _QuestionListService:QuestionListService){}
+
+  questionsNum!:number;
+
+  questions: Question[] = []; // قائمة الأسئلة
+  currentQuestionIndex = 0; // مؤشر السؤال الحالي
+  selectedOptions: string[] = []; // الخيارات المحددة لكل سؤال
+
+  nextQuestion() {
+    if (this.currentQuestionIndex < this.questions.length - 1) {
+      this.currentQuestionIndex++;
+    }
+  }
+
+  previousQuestion() {
+    if (this.currentQuestionIndex > 0) {
+      this.currentQuestionIndex--;
+    }
+  }
+
+  ngOnInit() {
+    // استرجاع الأسئلة من الباك إند
+    this.getQuestions();
+    this.startTimer(); // تشغيل التايمر
+  }
+
+  getQuestions() {
+    // استدعاء خدمة أو API لاسترجاع الأسئلة من الباك إند وتعيينها في قائمة الأسئلة
+    // يمكنك استخدام HttpClientModule للتواصل مع الباك إند
+    this._QuestionListService.getQuestions().subscribe({
+      next:(response)=>{
+        console.log(response.results);
+        this.questionsNum = response.results.length;
+        this.questions = response.results;
+        this.selectedOptions = new Array(this.questionsNum); // Initialize selectedOptions array
+      }
+    })
+  }
+
+  // ==== Timer ====
+
+  timer: number = 60 * 1.1; // الوقت بالدقائق
+
+  soundPlayed: boolean = false;
+
+  startTimer() {
+    setInterval(() => {
+      this.timer--;
+      if (this.timer <= 0) {
+        this.submitQuestions(); // يقفل الامتحان لوحده
+      } else if (this.timer < 60 && !this.soundPlayed) {
+        this.playSound(); // يلعب الصوت عندما يكون الوقت أقل من 60 ثانية
+      }
+    }, 1000); // كل ثانية
+  }
+
+  playSound(): void {
+    const audio = new Audio('./assets/sounds/WhatsApp Video 2024-06-12 at 19.31.15_216ca2bc.mp4');
+    const interval = setInterval(() => {
+      audio.play();
+    }, 1000); // كل ثانية
+
+    setTimeout(() => {
+      clearInterval(interval);
+    }, this.timer * 1000); // بعد الوقت المتبقي
+  }
+
+  submitQuestions() {
+    // إرسال الأسئلة والإجابات المدخلة إلى الباك إند للمعالجة والتخزين
+  }
+
+}

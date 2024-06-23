@@ -1,0 +1,81 @@
+<div class="grid grid-cols-12 container mt-6 gap-x-10">
+    <div class="col-span-3 space-y-4">
+        <div *ngIf="courseActive" class="bg-white shadow-lg rounded-lg p-2">
+            <h2 class="font-bold text-teal-600 tracking-widest">Exam</h2>
+            <p>{{courseActive.name}}</p>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-2" *ngIf="timer > 0 && questionsNum > 0">
+            <h2 class="font-bold text-teal-600 tracking-widest">Time</h2>
+            <p [class.text-rose-500]="timer < 60">{{ timer | timeFormat }}</p>
+        </div>
+
+        <div *ngIf="questions && questions.length > 0" class="bg-white shadow-lg rounded-lg p-2">
+            <h2 class="font-bold text-teal-600 tracking-widest">Questions Number</h2>
+            <p>{{questions.length}}</p>
+        </div>
+    </div>
+    <div class="col-span-9">
+
+        <div *ngIf="!canTakeExam && questionsNum > 0" class="bg-white shadow-lg rounded-lg p-4">
+            <p>{{courseActive.name}} Exam will start at {{ examStartDateTime |
+                date:'mediumTime' }} on {{
+                examStartDateTime |
+                date:'longDate' }}.</p>
+        </div>
+        <div *ngIf="questionsNum == 0" class="bg-white shadow-lg rounded-lg p-4">
+            <p>No exam has been added yet</p>
+        </div>
+
+        <div *ngIf="canTakeExam">
+            <div *ngIf="questions && questions.length > 0">
+                <div *ngIf="!submitted" class="bg-white rounded-lg py-4 px-8 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <button class="flex items-center gap-2 py-1 px-6 bg-slate-100 rounded focus:outline-none"
+                            (click)="previousQuestion()">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Previous</span>
+                        </button>
+
+                        <h3 class="text-teal-600 font-bold tracking-widest">Question {{ currentQuestionIndex + 1
+                            }}
+                        </h3>
+
+                        <button class="flex items-center gap-2 py-1 px-6 bg-slate-100 rounded focus:outline-none"
+                            (click)="nextQuestion()">
+                            <span>Next</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <p>{{ questions[currentQuestionIndex].question }}</p>
+
+                    <ul>
+                        <li class="flex *:cursor-pointer"
+                            *ngFor="let option of questions[currentQuestionIndex].options">
+                            <input type="radio" name="option" id="{{option}}"
+                                [(ngModel)]="selectedOptions[currentQuestionIndex]" [value]="option">
+                            <label class="block p-1 answer" for="{{option}}">{{ option }}</label>
+                        </li>
+                    </ul>
+
+                    <button (click)="submitQuestions()"
+                        class="bg-teal-600 text-white py-1 px-6 rounded ms-auto block focus:outline-none">Submit</button>
+
+                </div>
+
+                <div *ngIf="submitted" class="bg-white rounded-lg py-4 px-8 w-1/2 text-center space-y-2">
+                    <i *ngIf="score >= questionsNum / 2" class="bi bi-emoji-smile-fill text-7xl text-amber-500"></i>
+                    <i *ngIf="score < questionsNum / 2" class="bi bi-emoji-frown-fill  text-7xl text-amber-500"></i>
+                    <h2 *ngIf="score >= questionsNum / 2" class="tracking-widest font-bold">Success!</h2>
+                    <h2 *ngIf="score < questionsNum / 2" class="tracking-widest font-bold">Faild!</h2>
+                    <ng-template #zero>
+                        <p class="font-bold">0 %</p>
+                    </ng-template>
+                    <p *ngIf="score > 0; else zero">{{ (score * 100) / questionsNum }} %</p>
+                    <p *ngIf="score >= questionsNum / 2">congratulations 🎉</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
