@@ -53,9 +53,9 @@ const routes: Routes = [
   // {path:'confirmaccount',component:ConfirmaccountComponent,title:'Student Page'},
   {path:'studentpage',canActivate:[StudentGuard],component:StudentpageComponent,title:'Student Page',children:[
     {path:'',redirectTo:'studentdata',pathMatch:'full'},
-    {path:'studentdata',component:StudentdataComponent},
-    {path:'schangepassword',component:SchangepasswordComponent},
-    {path:'sexam/:id',component:SexamComponent},
+    {path:'studentdata',canActivate:[StudentGuard],component:StudentdataComponent},
+    {path:'schangepassword',canActivate:[StudentGuard],component:SchangepasswordComponent},
+    {path:'sexam/:id',canActivate:[StudentGuard],component:SexamComponent},
   ]},
 ];
 

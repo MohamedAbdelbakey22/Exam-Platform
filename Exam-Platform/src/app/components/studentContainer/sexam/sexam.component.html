@@ -14,6 +14,24 @@
             <h2 class="font-bold text-teal-600 tracking-widest">Questions Number</h2>
             <p>{{questions.length}}</p>
         </div>
+
+        <!--==== Camera Mode ====-->
+        <div class="bg-white shadow-lg rounded-lg p-2">
+            <h2 class="font-bold text-teal-600 tracking-widest">Camera Mode</h2>
+            <button *ngIf="!openCam" (click)="openCamera()"><i class="bi bi-camera-video-off text-2xl"></i></button>
+            <button *ngIf="openCam" (click)="openCamera()"><i class="bi bi-camera-video text-2xl"></i></button>
+        </div>
+
+        <div *ngIf="openCam"
+            class="flex items-center justify-center border-2 border-white text-white mx-auto rounded bg-black py-14">
+            <i class="bi bi-camera text-7xl"></i>
+        </div>
+
+        <!-- <div class="bg-white shadow-lg rounded-lg p-2">
+            <h2 class="font-bold text-teal-600 tracking-widest">Face Detection</h2>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*">
+        </div> -->
+
     </div>
     <div class="col-span-9">
 
@@ -28,7 +46,8 @@
         </div>
 
         <div *ngIf="canTakeExam">
-            <div *ngIf="questions && questions.length > 0">
+
+            <div *ngIf="questions && questions.length > 0" class="space-y-4">
                 <div *ngIf="!submitted" class="bg-white rounded-lg py-4 px-8 space-y-2">
                     <div class="flex items-center justify-between">
                         <button class="flex items-center gap-2 py-1 px-6 bg-slate-100 rounded focus:outline-none"

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -158,19 +158,28 @@ export class AuthService{
     return this._HttpClient.get(`${environment.baseUrl+'exam/courses/exams/Questions?CrseId='}${CrseId}`,{headers:this.headers})
   }
 
-    addAnswers(selectAnswer:any,questID:string, studentID:  string):Observable<any>{
+  // ==== Add Answer ====
+  addAnswers(selectAnswer:any,questID:string, studentID:  string):Observable<any>{
 
-      if (!selectAnswer || !questID || !studentID) {
-        throw new Error('questID is required');
-      }
-
-      const body = {
-        "selectAnswer": selectAnswer,
-        "questID": questID,
-        "studentID": studentID
-      };
-
-            return this._HttpClient.post(`${environment.baseUrl+'exam/courses/exams/Answer/'}${studentID}`,body,{headers:this.headers})
-
+    if (!selectAnswer || !questID || !studentID) {
+      throw new Error('questID is required');
     }
+
+    const body = {
+      "selectAnswer": selectAnswer,
+      "questID": questID,
+      "studentID": studentID
+    };
+
+          return this._HttpClient.post(`${environment.baseUrl+'exam/courses/exams/Answer/'}${studentID}`,body,{headers:this.headers})
+
+  }
+
+  // detectFaces(image: File): Observable<any> {
+  //   const formData: FormData = new FormData();
+  //   formData.append('image', image, image.name);
+  //   return this._HttpClient.post(`${environment.baseUrl+'detect_faces'}`, formData);
+  // }
+
+
 }

@@ -41,6 +41,10 @@ export class SexamComponent implements OnInit {
 
   canTakeExam = false;
 
+  openCam:boolean = false;
+
+  // selectedFile: File | null = null;
+
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe(params => {
       this.courseId = params.get('id');
@@ -54,6 +58,11 @@ export class SexamComponent implements OnInit {
 
     this.checkExamDateTime();
 
+  }
+
+  // ==== Open Camera ====
+  openCamera(){
+    this.openCam = !this.openCam;
   }
 
   checkExamDateTime(): void {
@@ -153,5 +162,19 @@ export class SexamComponent implements OnInit {
     });
     this.result = `${this.score} from ${this.questionsNum}`;
   }
+
+  // onFileSelected(event: any) {
+  //   this.selectedFile = event.target.files[0];
+  //   if (this.selectedFile) {
+  //     this._authService.detectFaces(this.selectedFile).subscribe({
+  //       next: (response) => {
+  //         console.log('Face detection response:', response);
+  //       },
+  //       error: (err) => {
+  //         console.error('Face detection error:', err);
+  //       }
+  //     });
+  //   }
+  // }
 
 }
